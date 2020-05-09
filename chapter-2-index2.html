@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE-edge">
+        <title>VueJS</title>
+        <link rel="stylesheet" href="">
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="app">
+            <button v-on:click="increase(2, $event)"> Click me </button> // we can pass our own arguments too.
+            <p>{{ counter }}</p>
+            <p v-on:mousemove="updateCoordinates">Coordinates: {{ x }} / {{ y }}
+                <span v-on:mousemove.stop>DEAD SPOT</spanv-on:mousemove> </span>
+            </p>
+            <input type="text" v-on:keyup.enter="alertMe">
+            <p>Result: {{ result }}</p>
+        </div>
+        <script>
+            new Vue({
+            el: '#app',
+            data: {
+                counter: 0,
+                x: 0,
+                y: 0,
+                result: '',
+            },
+            methods: {
+                increase: function(step, event) { // step gets passed in the html call site.
+                this.counter += step; // you have access to data by using this.
+              },
+                updateCoordinates: function(event) {
+                    this.x = event.clientX;
+                    this.y = event.clientY;
+                },
+                // dummy: function(event) { // you could pass this as the argument to mousemove OR use the .stop which stops propogation of the event to the parent.
+                //     event.stopPropagation(); // don't let it propgate up to parent elemnets
+                // }
+                alertMe: function(event) {
+                    alert('Alert');
+                }
+            }
+          })
+        </script>
+    </body>
+</html>
