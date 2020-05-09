@@ -26,9 +26,17 @@
 		computed: { // also allows us to store properties like output but
 			output: function() {
 			  console.log("inside computter function");
-				return this.counter > 5 ? "Greater 5" : "Smaller than 5"
+				return this.counter > 5 ? "Greater 5" : "Smaller than this is from output32 5"
 	  	}
 	  },
+		watch: { // this is called whenever the key data changes, in this case it's counter.
+	    counter: function(value) { // this watches the counter data and will run when that data property changes.
+	      var vm = this; // this is not avaialble inside the closure so we need to do this.
+				setTimeout(function() {
+				 vm.counter = 0;
+				}, 2000)
+			}
+		},
 	  methods: {
 			result: function() { // problem with this is that result gets called every time the page rerenders or update. everytime the datat changes, it updates. if this is a long function, this is a problem. If ANY data changes, this function gets called which is not good even if data unrealted to this function updates.
 			  	console.log("inside method");
