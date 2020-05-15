@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<title>VueJS</title>
+	<link rel="stylesheet" href="">
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div id="app1">
+	<my-cmp></my-cmp>
+	<hr>
+	<my-cmp></my-cmp>
+</div>
+
+<div id="app2">
+	<my-cmp></my-cmp>
+	<hr>
+	<my-cmp></my-cmp>
+</div>
+
+<script>
+	var cmp = { // this is how to use components
+	  data: function() {
+	    return {
+	      status: "Critical"
+			}
+		},
+		template: "<p> Server status: {{ status }} (<button @click='changeStatus'> Change </button>)</p>",
+		methods: {
+	    changeStatus: function() {
+	      this.status = "Normal"; // because we return a different object per component, this refers to different objects and not the same object which is why both components act independently.
+			}
+		}
+	};
+
+  new Vue({
+		el: '#app1',
+		components: { // tells us which components are available in this instance here. This component is registered locallyto this Vue instance. my-cmp will do nothing in app2 div above in the html.
+	    'my-cmp': cmp
+	  }
+  });
+
+  new Vue({
+ 		el: '#app2',
+  })
+</script>
+</body>
+</html>

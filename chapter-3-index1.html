@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<title>VueJS</title>
+	<link rel="stylesheet" href="">
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div id="app">
+	<p v-if="show">you can see me! <span>this is hte span</span></p>
+	<p v-else>Now you see me!</p>
+	<template v-if="show">
+		<h1>Heading</h1>
+		<p>Inside this template</p>
+	</template>
+	<p>Doi you also see me?</p>
+	<button @click="show = !show">Switch</button>
+</div>
+<script>
+  new Vue({
+	el: '#app',
+	data: {
+	  show: true,
+	},
+	methods: {}
+  })
+</script>
+</body>
+</html>
