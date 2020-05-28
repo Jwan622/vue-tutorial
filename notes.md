@@ -176,3 +176,100 @@ and in child:
  - second way is to use callbacks.
  - the third way to transmit data between children components is to use an event bus by creating a new vue instance. it's a way for children to communicate without having to traverse up to the parent. even this can get complicated though.
  - a fourth way is to use Vuex which is great for larger applications. Even event buses are not great for larger applications.
+ 
+ 
+ ### Chapter 9
+ - you can also pass content to components by enclosing it in the html element like this:
+ 
+ ```vuejs
+<custom-element>
+<p> Some content </p>
+<p> Some content </p>
+</custom-element>
+```
+we can use slots for this. it's for content being passed from the outside.
+
+- slots render in the child component what is inside the opening and closing selector. Use in child like this:
+
+```vuejs
+    <slot></slot>
+```
+
+and that will render the two <p> tags above in the child component.
+- one note is that the styling of the slotted selectors needs to be done in the child. It is compiled as part of the child. so the styling needs to be done in the child. but for data, that is done in the parent so if you write something like this in the slotted content: `{{ user }}`, that user variable needs to be in the parent's data key. 
+- styling is setup on teh child, but variables are done in the parent for slots. 
+- if you write `slot="title"` in the element, this is a known vue.js concept. vue will detect this and knows the quotation marks is the name of the slot it should render the content in. It would look something like this:
+```vuejs
+  <h2 slot="title">{{ quoteTitle }}</h2>
+```
+It looks for a slot with `name="title"` and renders the content in that slot in the child.
+-  unnamed slots are default slots. So anything without a name slot will go in the default slot,
+- default slots can also be made in the child by putting content inside the tags. 
+
+- What are dynamic components? you can use the `component` built in. Like this:
+
+```vuejs
+      <button @click="selectedComponent = 'appQuote'">Quote</button>
+      <button @click="selectedComponent = 'appAuthor'">Author</button>
+	  <button @click="selectedComponent = 'appNew'">New</button>
+<component :is="selectedComponent"></component>
+```
+
+and this is our data in the component:
+
+```vuejs
+        data: function() {
+            return {
+                quoteTitle: "The Quote",
+                selectedComponent: "appQuote"
+            }
+        },
+        components: {
+            appQuote: Quote,
+            appAuthor: Author,
+            appNew: New,
+        }
+```
+so basically the selectedComponent is going to be se to one of thte three components.
+
+
+## Chapter 11
+
+- `v-model.lazy` is used so that instead of changing the data on keystroke down, it changes only when you click away form the field. It will no longer listen to the input event but the change event. you can also do something like `v-model.lazy.number` to convert the input to a number lazily.
+- if you bind two checkbox inputs to the same model, vuejs will detect this and store the inputs as an array if you select multiple checkboxes. will auto merge the values of the inputs to the single array.
+- if you attach the same v-model string to radio buttons, vuejs will auto know to only select one at at time and only store whichever radio button is selected..
+- to do select dropdowns:
+```vuejs
+
+                    <select
+                            id="priority"
+                            class="form-control">
+                        <option v-for="priority in priorities" :selected="priority == 'medium'"> {{ priority }}</option>
+                    </select>
+```
+the `:selected` attributte takes a boolean and this is how to set a default of medium.. the above is way to setup the viewable options.
+- to bind a select, we need `v-model` on the select field, it goes on teh select element. we can also override the `:selected` option on the `option` element by using `v-model` and default.:
+```vuejs
+                    <select
+                            id="priority"
+                            class="form-control"
+                            v-model="selectedPriority"
+                    >
+                        <option
+                            v-for="priority in priorities"
+                            :selected="priority == 'medium'"
+                        >{{ priority }}</option>
+                    </select>
+```
+- `v-model` is a combination of `value` and `@input`. `value` sets teh input value and `@input` listener can set the value on change. So if you make your own component that uses `v-model` you need to use `@input` and `value`.
+- v-model passes value to the component and it responds to `input` events. So the component takes in a value as props and emits an input event which v-mdoel listens to. That's how you can get v-model to work on a custom component:
+```vuejs
+    export default {
+        props: ['value'],
+        methods: {
+            switched(isOn) {
+                this.$emit('input', isOn); // the component in order to respond to v-model needs to take in value and emit an input event.
+            }
+        }
+    }
+```

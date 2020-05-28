@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import { eventBus } from "../main";
     export default {
         props: {
             myName: {
@@ -26,6 +27,11 @@
                 this.myName = 'Max';
                 this.$emit('nameWasReset', this.myName); // this emits an event instead of using a callback. both are ways to talk to the parent component
             }
+        },
+        created() {
+            eventBus.$on('ageWasEdited', (data) => {
+               this.userAge = data;
+            })
         }
     }
 </script>

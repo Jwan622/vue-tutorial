@@ -9,6 +9,7 @@
 </template>
 
 <script>
+    import  { eventBus } from "../main";
     export default {
         props: {
             userAge: Number,
@@ -17,7 +18,9 @@
         methods: {
             editAge() {
                 this.userAge = 33;
-                this.$emit('ageWasEdited', 35); // this is neat because when we emit this event to the parent once, it'll rerender the parent and this child will rerender with 35, but a second time it will not work because the parent won't rerender a second time so the age stays at 33 on the second time.
+                // this.$emit('ageWasEdited', 35); // this is neat because when we emit this event to the parent once, it'll rerender the parent and this child will rerender with 35, but a second time it will not work because the parent won't rerender a second time so the age stays at 33 on the second time.
+							  // eventBus.$emit('ageWasEdited', this.userAge);
+                eventBus.changeAge(this.userAge)
             }
         }
     }
